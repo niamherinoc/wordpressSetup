@@ -18,14 +18,14 @@ sudo apt-get install -y php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-
 
 #clean up first
 echo "Droping database $DB if it already exists.";
-mysql -uroot -p$DBPASSWD -e "DROP DATABASE IF EXISTS $DBNAME";
+mysql -uroot -proot -e "DROP DATABASE IF EXISTS $DBNAME";
 
 echo "Creating new database $DB";
-mysql -uroot -p$DBPASSWD -e "create database $DBNAME";
-mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'localhost' identified by '$DBPASSWD'"
+mysql -uroot -proot -e "create database $DBNAME";
+mysql -uroot -proot -e "grant all privileges on $DBNAME.* to '$DBUSER'@'localhost' identified by '$DBPASSWD'"
 
 echo "Importing data to $DB from $DUMPFILE";
-mysql -uroot -p$DBPASSWD -h localhost -e "$DBNAME < $DUMPFILE";
+mysql -u$DBUSER -p$DBPASSWD -h localhost -e "$DBNAME < $DUMPFILE";
 
 cat << EOF | sudo tee -a /etc/php5/mods-available/xdebug.ini
 xdebug.scream=1
